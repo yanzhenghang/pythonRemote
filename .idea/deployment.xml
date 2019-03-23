@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="10.3.242.38">
+    <serverData>
+      <paths name="10.3.242.38">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/pythonProject" local="$PROJECT_DIR$" web="/home/zhangyifan/yanzhenghang/" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath path="/python362" />
+            <excludedPath path="/pythonProject/312data.csv" />
+            <excludedPath path="/pythonProject/313data.csv" />
+            <excludedPath path="/pythonProject/314data.csv" />
+            <excludedPath path="/pythonProject/315data.csv" />
+            <excludedPath path="/pythonProject/316data.csv" />
+            <excludedPath path="/pythonProject/317data.csv" />
+            <excludedPath path="/pythonProject/318data.csv" />
+            <excludedPath path="/pythonProject/小区基础数据.xlsx" />
+            <excludedPath path="/pythonProject/小区天线参数数据.xlsx" />
+            <excludedPath path="/pythonProject/mat_discrete.csv" />
+            <excludedPath path="/pythonProject/mat_continuous.csv" />
+            <excludedPath path="/pythonProject/final_discrete_v1.csv" />
+            <excludedPath path="/pythonProject/final_discrete_500_sampled.csv" />
+            <excludedPath path="/pythonProject/final_continuous_v1.csv" />
+            <excludedPath path="/pythonProject/final_continuous_500_sampled.csv" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>
