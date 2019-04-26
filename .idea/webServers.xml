@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="233b74f8-c473-4630-866b-70d1bd25292a" name="10.117.63.36" url="http://10.117.63.36">
+        <fileTransfer host="10.117.63.36" port="22" rootFolder="/home/yanzh" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="66db3c8b-ea03-4b93-9e7b-0014611940da" name="10.117.63.37" url="http://10.117.63.37">
+        <fileTransfer host="10.117.63.37" port="22" rootFolder="/home/yanzhenghang" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="7d638892-137a-4046-b83a-4f49ba323ae9" name="10.117.63.32" url="http://10.117.63.32">
+        <fileTransfer host="10.117.63.32" port="22" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

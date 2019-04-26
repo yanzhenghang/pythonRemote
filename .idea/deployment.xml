@@ -1,11 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="10.3.242.38">
+  <component name="PublishConfigData" autoUpload="Always" serverName="10.117.63.37">
     <serverData>
+      <paths name="10.117.63.32">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/yanzhenghang/pythonRemote" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="10.117.63.36">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/pythonRemote" local="$PROJECT_DIR$" />
+            <mapping deploy="/nlp_base" local="$PROJECT_DIR$/../nlp_base" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="10.117.63.37">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/pythonRemote" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/nlp_base" local="$PROJECT_DIR$/../nlp_base" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="10.3.242.38">
         <serverdata>
           <mappings>
             <mapping deploy="/pythonProject" local="$PROJECT_DIR$" web="/home/zhangyifan/yanzhenghang/" />
+            <mapping deploy="" local="" />
           </mappings>
           <excludedPaths>
             <excludedPath path="/python362" />
