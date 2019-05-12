@@ -103,7 +103,7 @@ def Find(target, array):
 
 print(Find(target=1,array = [[1,2,8,9],[2,4,9,12],[4,7,10,13],[6,8,11,15]]))
 
-
+import queue
 # Definition for singly-linked list.  For 21
 class ListNode:
     def __init__(self, x):
@@ -115,6 +115,78 @@ class TreeNode:
         self.left = None
         self.right = None
 class Solution:
+
+#35. Search Insert Position
+    def searchInsert(self, nums: list, target: int) -> int:
+        low, high = 0, len(nums) - 1
+        while low <= high:
+            mid = low + (high - low) // 2
+            if nums[mid] == target:
+                return mid
+            elif nums[mid] > target:
+                high = mid - 1
+            else:
+                low = mid + 1
+        return low
+
+        # def binSrc(nums,target,s,e):
+        #     if s>=e:return s
+        #     ans = -1
+        #     mid = s+(e-s)//2
+        #     if target < nums[mid]: e = mid-1
+        #     elif target == nums[mid]: return mid
+        #     else: s = mid+1
+        #     ans = binSrc(nums,target,s,e)
+        #     return ans
+        # return binSrc(nums,target,0,len(nums)-1)
+
+#23. Merge k Sorted Lists
+    def mergeKLists(self, lists: list) -> ListNode:
+        sorted_list_head = sorted_list_tail = ListNode(0)
+
+        pq = queue.PriorityQueue()
+
+        def add_node_in_pq(idx, node):
+            if node:
+                pq.put((node.val, idx, node))
+
+        for idx, node in enumerate(lists):
+            add_node_in_pq(idx, node)
+
+        while not pq.empty():
+            _, idx, node = pq.get()
+            add_node_in_pq(idx, node.next)
+            node.next = None
+            sorted_list_tail.next = node
+            sorted_list_tail = sorted_list_tail.next
+
+        return sorted_list_head.next
+
+#         if lists == None or len(lists) == 0: return None
+#         ans = ListNode(0)
+#         myans = ans
+#         q = PriorityQueue()
+
+#         for idx,node in enumerate(lists):
+#             if node: q.put([node.val,idx, node])
+#         while q.qsize()>0:
+#             myans.next = q.get()[2]
+#             myans = myans.next
+#             if myans.next: q.put((myans.next.val, q.get()[1], myans.next))
+#         return ans.next
+
+#         if lists == None of len(lists) == 0: return None
+#         mylists = lists
+
+#         ans = ListNode(0)
+
+#         myans = ans
+
+#         while  sum([v.next!=None for v in mylists]):
+
+#             if mylists[0].val < mylists[1].val:
+#                 myans.next = ListNode(mylists[0].val)
+#                 mylists[0] = mylists[0].next
 
     #*******************************回溯法***********************
     #78. Subsets
@@ -883,8 +955,19 @@ print(Solution().subsets([1,2,3]))
 #90. Subsets2
 print(Solution().subsetsWithDup([4,4,4,1,4]))
 
+#23. Merge k Sorted Lists
+data_tmp = [[1,4,5],[1,3,4],[2,6]]
+data_in = []
+for i in range(len(data_tmp)):
+    tmp0 = tmp = ListNode(None)
+    for v in data_tmp[i]:
+        tmp.next = ListNode(v)
+        tmp = tmp.next
+    data_in.append(tmp0.next)
+print(Solution().mergeKLists(data_in))
 
-
+#35. Search Insert Position
+print(Solution().searchInsert([1,3,5,6],0))
 
 #190407 腾讯笔试2题  一般情况正确
 def costnum(n, l):

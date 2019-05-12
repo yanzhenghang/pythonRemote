@@ -25,6 +25,14 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="10.117.63.37 (project level)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/pythonRemote" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/nlp_base" local="$PROJECT_DIR$/../nlp_base" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="10.3.242.38">
         <serverdata>
           <mappings>

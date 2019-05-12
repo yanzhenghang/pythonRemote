@@ -10,7 +10,7 @@
           <option name="port" value="22" />
         </fileTransfer>
       </webServer>
-      <webServer id="66db3c8b-ea03-4b93-9e7b-0014611940da" name="10.117.63.37" url="http://10.117.63.37">
+      <webServer id="66db3c8b-ea03-4b93-9e7b-0014611940da" name="10.117.63.37 (project level)" url="http://10.117.63.37">
         <fileTransfer host="10.117.63.37" port="22" rootFolder="/home/yanzhenghang" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" />
