@@ -55,32 +55,32 @@ class RandomSizedCrop:
         return crop(scale(img))
 
 
-train_transform = Compose([
-    trf.RandomApply([RandomHorizontalFlip(p=0.4),
-                     trf.RandomVerticalFlip(p=0.2),
-                     trf.RandomRotation(45),
-                     trf.ColorJitter(brightness=0.1, contrast=0.1, hue=0.1)], p=0.9),
-    RandomSizedCrop(size=288, min_area=0.8),
-])
-# trf.RandomChoice([RandomCrop(288),Resize(288)]),
 # train_transform = Compose([
-#     RandomCrop(288),
-#     RandomHorizontalFlip(),
+#     trf.RandomApply([RandomHorizontalFlip(p=0.4),
+#                      trf.RandomVerticalFlip(p=0.2),
+#                      trf.RandomRotation(45),
+#                      trf.ColorJitter(brightness=0.1, contrast=0.1, hue=0.1)], p=0.9),
+#     RandomSizedCrop(size=288, min_area=0.8),
 # ])
-
-
-
-test_transform = Compose([
-    # trf.RandomApply([RandomHorizontalFlip(p=0.4),
-    #                  trf.RandomVerticalFlip(p=0.2),
-    #                  trf.RandomRotation(45),
-    #                  trf.ColorJitter(brightness=0.1, contrast=0.1, hue=0.1)], p=0.9),
-    RandomSizedCrop(size=288, min_area=0.8),
+# trf.RandomChoice([RandomCrop(288),Resize(288)]),
+train_transform = Compose([
+    RandomCrop(300),
+    RandomHorizontalFlip(),
 ])
+
+
+
 # test_transform = Compose([
-#     RandomCrop(size = 288),
-#     RandomHorizontalFlip(),
+#     # trf.RandomApply([RandomHorizontalFlip(p=0.4),
+#     #                  trf.RandomVerticalFlip(p=0.2),
+#     #                  trf.RandomRotation(45),
+#     #                  trf.ColorJitter(brightness=0.1, contrast=0.1, hue=0.1)], p=0.9),
+#     RandomSizedCrop(size=288, min_area=0.8),
 # ])
+test_transform = Compose([
+    RandomCrop(size=300),
+    RandomHorizontalFlip(),
+])
 
 
 
