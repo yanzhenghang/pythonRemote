@@ -23,8 +23,14 @@ from .utils import (
     write_event, load_model, mean_df, ThreadingDataLoader as DataLoader,
     ON_KAGGLE)
 
-
-
+# added by YZH 190516
+from . import senet
+# a simple custom collate function, just to show the idea
+def my_collate(batch):
+    data = [item[0] for item in batch]
+    target = [item[1] for item in batch]
+    target = torch.Tensor(target).long()#tensor()#torch.#LongTensor(target)
+    return [data, target]
 
 def main(*myarg):
     parser = argparse.ArgumentParser()
@@ -35,7 +41,7 @@ def main(*myarg):
     else:
         arg('--mode', choices=['train', 'validate', 'predict_valid', 'predict_test'], default=myarg[0])
         arg('--run_root', default=myarg[1])
-    arg('--model', default='resnet50')
+    arg('--model', default='resnet101')
     arg('--pretrained', type=int, default=1)
     arg('--batch-size', type=int, default=64)
     arg('--step', type=int, default=1)
@@ -53,7 +59,11 @@ def main(*myarg):
     args = parser.parse_args()
 
     run_root = Path(args.run_root)
-    folds = pd.read_csv(DATA_ROOT/'folds.csv')
+    folds = []
+    if ON_KAGGLE:
+        folds = pd.read_csv('folds.csv')
+    else:
+        folds = pd.read_csv(DATA_ROOT/'folds.csv')
     train_root = DATA_ROOT / ('train_sample' if args.use_sample else 'train')
     if args.use_sample:
         folds = folds[folds['Id'].isin(set(get_ids(train_root)))]
@@ -69,6 +79,7 @@ def main(*myarg):
             shuffle=True,
             batch_size=args.batch_size,
             num_workers=args.workers,
+            # collate_fn=my_collate,
         )
     criterion = nn.BCEWithLogitsLoss(reduction='none')
     model = getattr(models, args.model)(
@@ -165,6 +176,7 @@ def predict(model, root: Path, df: pd.DataFrame, out_path: Path,
         shuffle=False,
         batch_size=batch_size,
         num_workers=workers,
+        # collate_fn=my_collate,
     )
     model.eval()
     all_outputs, all_ids = [], []
@@ -213,7 +225,7 @@ def train(args, model: nn.Module, criterion, *, params,
         'best_valid_loss': best_valid_loss
     }, str(model_path))
 
-    report_each = 10
+    report_each = 1000
     log = run_root.joinpath('train.log').open('at', encoding='utf8')
     valid_losses = []
     lr_reset_epoch = epoch
@@ -249,7 +261,7 @@ def train(args, model: nn.Module, criterion, *, params,
             tq.close()
             save(epoch + 1)
             valid_metrics = validation(model, criterion, valid_loader, use_cuda)
-            write_event(log, step, **valid_metrics)
+            write_event(log, step, **dict(valid_metrics,**{'epoch':epoch}))
             valid_loss = valid_metrics['valid_loss']
             valid_losses.append(valid_loss)
             if valid_loss < best_valid_loss:
@@ -377,7 +389,7 @@ def find_best_fixed_threshold(preds, targs, do_plot=True):
 #
 #     f2 = (1 + beta_f2 ** 2) * p * r / (p * beta_f2 ** 2 + r + 1e-15)
 
-    return f2
+    # return f2
 
 
 if __name__ == '__main__':

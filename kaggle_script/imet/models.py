@@ -8,6 +8,7 @@ import torchvision.models as M
 
 from .utils import ON_KAGGLE
 
+from . import senet
 
 class AvgPool(nn.Module):
     def forward(self, x):
@@ -65,6 +66,27 @@ class DenseNet(nn.Module):
         out = self.net.classifier(out)
         return out
 
+class SeResNet(nn.Module):
+    def __init__(self, num_classes,
+                 pretrained=False, net_cls=senet.se_resnet101, dropout=False):
+        super().__init__()
+        self.net = create_net(net_cls, pretrained=pretrained)
+        self.net.avgpool = AvgPool()
+        if dropout:
+            self.net.fc = nn.Sequential(
+                nn.Dropout(),
+                nn.Linear(self.net.fc.in_features, num_classes),
+            )
+        else:
+            self.net.fc = nn.Linear(self.net.fc.in_features, num_classes)
+
+    def fresh_params(self):
+        return self.net.fc.parameters()
+
+    def forward(self, x):
+        return self.net(x)
+
+
 
 resnet18 = partial(ResNet, net_cls=M.resnet18)
 resnet34 = partial(ResNet, net_cls=M.resnet34)
@@ -76,3 +98,7 @@ densenet121 = partial(DenseNet, net_cls=M.densenet121)
 densenet169 = partial(DenseNet, net_cls=M.densenet169)
 densenet201 = partial(DenseNet, net_cls=M.densenet201)
 densenet161 = partial(DenseNet, net_cls=M.densenet161)
+
+# Net = getattr(senet, 'se_resnet101')
+# seresnet101 = Net(num_classes=1103)
+seresnet101 = partial(SeResNet, net_cls=senet.se_resnet101)

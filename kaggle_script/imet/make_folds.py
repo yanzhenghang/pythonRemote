@@ -6,6 +6,7 @@ import pandas as pd
 import tqdm
 
 from .dataset import DATA_ROOT
+from .utils import ON_KAGGLE
 
 
 # added by YZH 190506
@@ -44,7 +45,10 @@ def main():
     parser.add_argument('--n-folds', type=int, default=6)
     args = parser.parse_args()
     df = make_folds(n_folds=args.n_folds)
-    df.to_csv(DATA_ROOT / 'folds.csv', index=None)
+    if ON_KAGGLE:
+        df.to_csv('folds.csv', index=None)
+    else:
+        df.to_csv(DATA_ROOT / 'folds.csv', index=None)
 
 
 if __name__ == '__main__':
