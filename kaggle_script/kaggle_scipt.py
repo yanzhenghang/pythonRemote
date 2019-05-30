@@ -22,7 +22,7 @@ if ON_kaggle:
 
 pythonVersion = 'python3'
 pth_str = '.'
-model_num = 25
+model_num = 39
 outputname = 'submission'+str(model_num)+'.csv'
 if ON_kaggle:
     pythonVersion = 'python'

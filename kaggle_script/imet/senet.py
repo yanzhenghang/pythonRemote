@@ -7,6 +7,7 @@ import torch.utils.model_zoo as model_zoo
 
 model_urls = {
     'se_resnet101':'http://data.lip6.fr/cadene/pretrainedmodels/se_resnet101-7e38fcc6.pth',
+    'se_resnext101':'/home/yanzhenghang/resnext_101_32x4d.pth'
     # 'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
     # 'resnet34': 'https://download.pytorch.org/models/resnet34-333f7ec4.pth',
     # 'resnet50': 'https://download.pytorch.org/models/resnet50-19c8e357.pth',
@@ -131,8 +132,9 @@ class Selayer(nn.Module):
     def __init__(self, inplanes):
         super(Selayer, self).__init__()
         self.global_avgpool = nn.AdaptiveAvgPool2d(1)
-        self.conv1 = nn.Conv2d(inplanes, inplanes / 16, kernel_size=1, stride=1)
-        self.conv2 = nn.Conv2d(inplanes / 16, inplanes, kernel_size=1, stride=1)
+        #YZH modified 190522 / 变成//
+        self.conv1 = nn.Conv2d(inplanes, inplanes // 16, kernel_size=1, stride=1)
+        self.conv2 = nn.Conv2d(inplanes // 16, inplanes, kernel_size=1, stride=1)
         self.relu = nn.ReLU(inplace=True)
         self.sigmoid = nn.Sigmoid()
 
@@ -304,12 +306,14 @@ def se_resnext50(**kwargs):
     return model
 
 
-def se_resnext101(**kwargs):
+def se_resnext101(pretrained=False, **kwargs):
     """Constructs a SE-ResNeXt-101 model.
     Args:
         num_classes = 1000 (default)
     """
     model = SEResNeXt(BottleneckX, [3, 4, 23, 3], **kwargs)
+    if pretrained:
+        model.load_state_dict(model_zoo.load_url(model_urls['se_resnext101']))
     return model
 
 

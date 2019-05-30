@@ -41,8 +41,8 @@ def main(*myarg):
     else:
         arg('--mode', choices=['train', 'validate', 'predict_valid', 'predict_test'], default=myarg[0])
         arg('--run_root', default=myarg[1])
-    arg('--model', default='resnet101')#resnet101
-    arg('--pretrained', type=int, default=1)
+    arg('--model', default='resnet101')
+    arg('--pretrained', type=int, default=0)
     arg('--batch-size', type=int, default=64)
     arg('--step', type=int, default=1)
     arg('--workers', type=int, default=2 if ON_KAGGLE else 4)
@@ -59,11 +59,7 @@ def main(*myarg):
     args = parser.parse_args()
 
     run_root = Path(args.run_root)
-    folds = []
-    if ON_KAGGLE:
-        folds = pd.read_csv('folds.csv')
-    else:
-        folds = pd.read_csv(DATA_ROOT/'folds.csv')
+    folds = pd.read_csv(DATA_ROOT/'folds.csv')
     train_root = DATA_ROOT / ('train_sample' if args.use_sample else 'train')
     if args.use_sample:
         folds = folds[folds['Id'].isin(set(get_ids(train_root)))]

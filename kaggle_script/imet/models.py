@@ -9,6 +9,7 @@ import torchvision.models as M
 from .utils import ON_KAGGLE
 
 from . import senet
+# from . import se_resnet
 
 class AvgPool(nn.Module):
     def forward(self, x):
@@ -20,8 +21,15 @@ def create_net(net_cls, pretrained: bool):
         net = net_cls()
         model_name = net_cls.__name__
         weights_path = f'../input/{model_name}/{model_name}.pth'
+        # resnext_101_32x4d.pth
         net.load_state_dict(torch.load(weights_path))
     else:
+        # model_name = net_cls.__name__
+        # net = []
+        # if set(model_name) & set('next'):
+        #     net = net_cls()
+        #     net.load_state_dict(torch.load(f'/home/yanzhenghang/resnext_101_32x4d.pth'))
+        # else:
         net = net_cls(pretrained=pretrained)
     return net
 
@@ -68,10 +76,10 @@ class DenseNet(nn.Module):
 
 class SeResNet(nn.Module):
     def __init__(self, num_classes,
-                 pretrained=False, net_cls=senet.se_resnet101, dropout=False):
+                 pretrained=False, net_cls=senet.se_resnext101, dropout=False):
         super().__init__()
         self.net = create_net(net_cls, pretrained=pretrained)
-        self.net.avgpool = AvgPool()
+        # self.net.avgpool = AvgPool()
         if dropout:
             self.net.fc = nn.Sequential(
                 nn.Dropout(),
@@ -101,4 +109,8 @@ densenet161 = partial(DenseNet, net_cls=M.densenet161)
 
 # Net = getattr(senet, 'se_resnet101')
 # seresnet101 = Net(num_classes=1103)
+
 seresnet101 = partial(SeResNet, net_cls=senet.se_resnet101)
+seresnext101 = partial(SeResNet, net_cls=senet.se_resnext101)
+
+# seresnet101 = partial(SeResNet, net_cls=se_resnet.se_resnet101)

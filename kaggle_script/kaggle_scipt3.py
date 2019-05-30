@@ -22,12 +22,23 @@ if ON_kaggle:
 
 pythonVersion = 'python3'
 pth_str = '.'
-model_num = 0
+model_num = 19
 outputname = 'submission'+str(model_num)+'.csv'
+toPredictFiles ='model_'+str(model_num)+'/test.h5 '
 if ON_kaggle:
     pythonVersion = 'python'
     pth_str = ''
     outputname = 'submission.csv'
+
+    model_list = [0,5,10,15,20]
+    tmpStrLst = ['../input/model-'+str(v)+'/test.h5' for v in model_list]
+    toPredictFiles = ''
+    for i, val in enumerate(tmpStrLst):
+        toPredictFiles += val
+        if i < (len(tmpStrLst)-1):
+            toPredictFiles += ' '
+
+
 else:
     if not os.path.exists('./kaggle/working'):
         os.makedirs('./kaggle/working')
@@ -38,6 +49,6 @@ run(pythonVersion+' setup.py develop --install-dir '+pth_str+'/kaggle/working')
 run(pythonVersion+' -m imet.make_folds --n-folds 40')
 run(pythonVersion+' -m imet.main train model_'+str(model_num)+' --n-epochs 18 --model resnet101 --batch-size 32 --fold '+str(model_num)+' --patience 2 --lr 0.0001')
 run(pythonVersion+' -m imet.main predict_test model_'+str(model_num)+' --model resnet101 --batch-size 32 --fold '+str(model_num)+' --patience 2 --lr 0.0001')
-run(pythonVersion+' -m imet.make_submission model_'+str(model_num)+'/test.h5 '+outputname)
+run(pythonVersion+' -m imet.make_submission '+toPredictFiles+' '+outputname)
 
 # run(pythonVersion+' -m imet.make_submission ../kaggle_script/model_'+str(model_num)+'/test.h5 ../kaggle_script/model_'+str(1)+'/test.h5 '+outputname)

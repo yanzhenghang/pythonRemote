@@ -3,6 +3,9 @@ import random
 
 
 
+
+
+
 # n = int(input())
 # m = int(input())
 # table = []
@@ -118,6 +121,67 @@ class TreeNode:
         self.left = None
         self.right = None
 class Solution:
+
+    def heapsort(self, nums:list):
+        N = len(nums)
+        if N<2:return
+        def swap(nums, i, j):
+            tmp = nums[i]
+            nums[i] = nums[j]
+            nums[j] = tmp
+        def adjustheap(nums:list, l, r):
+            k = 2 * l + 1
+            while k <= r:
+                if k+1<=r and nums[k]<nums[k+1]:
+                    k+=1
+                if nums[k]>nums[l]:
+                    swap(nums,l,k)
+                    l = k
+                else:
+                    break
+                k = 2 * l + 1
+        for i in range(N//2-1,-1,-1):
+            adjustheap(nums, i, N-1)
+        for i in range(N-1,0,-1):
+            swap(nums,0,i)
+            adjustheap(nums,0,i-1)
+        return nums
+
+
+
+# 4. Median of Two Sorted Arrays
+    def findMedianSortedArrays(self, nums1: list, nums2: list) -> float:
+        m, n = len(nums1), len(nums2)
+        if m > n:
+            nums1, nums2, m, n = nums2, nums1, n, m
+        if n == 0:
+            raise ValueError
+        imin, imax, half_len = 0, m, (m + n + 1) // 2
+        while imin <= imax:
+            i = (imin + imax) // 2
+            j = half_len - i
+            if i < m and nums2[j - 1] > nums1[i]:
+                imin = i + 1
+            elif i > 0 and nums1[i - 1] > nums2[j]:
+                imax = i - 1
+            else:
+                if i == 0:
+                    max_of_left = nums2[j - 1]
+                elif j == 0:
+                    max_of_left = nums1[i - 1]
+                else:
+                    max_of_left = max(nums1[i - 1], nums2[j - 1])
+
+                if (m + n) % 2 == 1:
+                    return max_of_left
+                if i == m:
+                    min_of_right = nums2[j]
+                elif j == n:
+                    min_of_right = nums1[i]
+                else:
+                    min_of_right = min(nums1[i], nums2[j])
+
+                return (max_of_left + min_of_right) / 2.0
 
 #35. Search Insert Position
     def searchInsert(self, nums: list, target: int) -> int:
@@ -971,6 +1035,13 @@ print(Solution().mergeKLists(data_in))
 
 #35. Search Insert Position
 print(Solution().searchInsert([1,3,5,6],0))
+
+# 4. Median of Two Sorted Arrays
+print(Solution().findMedianSortedArrays([1,3,5,7,9],[2,4,6,8,10,12]))
+
+# nums = [9,8,7,6,5,4,2,3]
+
+print(Solution().heapsort(nums = [9,13,7,12,5,17,2,3]))
 
 #190407 腾讯笔试2题  一般情况正确
 def costnum(n, l):
