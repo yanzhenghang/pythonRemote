@@ -8,6 +8,10 @@ from torchvision.transforms import (
 
 import torchvision.transforms as trf
 
+try:
+    import accimage
+except ImportError:
+    accimage = None
 
 
 class RandomSizedCrop:
@@ -55,6 +59,46 @@ class RandomSizedCrop:
         return crop(scale(img))
 
 
+class MyResize(Resize):
+    def __init__(self, size, interpolation=Image.BILINEAR):
+        Resize.__init__(self, size=size, interpolation=interpolation)
+    def __call__(self, img):
+        """
+        Args:
+            img (PIL Image): Image to be scaled.
+
+        Returns:
+            PIL Image: Rescaled image.
+        """
+        def _is_pil_image(img):
+            if accimage is not None:
+                return isinstance(img, (Image.Image, accimage.Image))
+            else:
+                return isinstance(img, Image.Image)
+        def resize(img, size, interpolation=Image.BILINEAR):
+            if not _is_pil_image(img):
+                raise TypeError('img should be PIL Image. Got {}'.format(type(img)))
+            # if not (isinstance(size, int) or (isinstance(size, Iterable) and len(size) == 2)):
+            #     raise TypeError('Got inappropriate size arg: {}'.format(size))
+
+            if isinstance(size, int):
+                w, h = img.size
+                if (w <= h and h == size) or (h <= w and w == size):
+                    return img
+                if w < h:
+                    oh = size
+                    ow = int(size * w / h)
+                    return img.resize((ow, oh), interpolation)
+                else:
+                    ow = size
+                    oh = int(size * h / w)
+                    # out = img.resize((ow, oh), interpolation)
+                    return img.resize((ow, oh), interpolation)
+            else:
+                return img.resize(size[::-1], interpolation)
+        return resize(img, self.size, self.interpolation)
+
+
 # train_transform = Compose([
 #     trf.RandomApply([RandomHorizontalFlip(p=0.4),
 #                      trf.RandomVerticalFlip(p=0.2),
@@ -74,9 +118,13 @@ train_transform = Compose([
     trf.RandomApply([trf.ColorJitter(brightness=0.2, contrast=0.2, hue=0.2)], p=0.8),
     trf.RandomApply([trf.RandomRotation(10)], p=0.8),
     # trf.Resize(size=256),
-    RandomCrop(288),
+    MyResize(size=288),
+    RandomCrop(size=288, pad_if_needed=True, padding=0),
     RandomHorizontalFlip(),
 ])
+
+
+
 
 # test_transform = Compose([
 #     # trf.RandomApply([RandomHorizontalFlip(p=0.4),
@@ -86,8 +134,9 @@ train_transform = Compose([
 #     RandomSizedCrop(size=288, min_area=0.8),
 # ])
 test_transform = Compose([
-    RandomCrop(size=288),
+    MyResize(size=288),
     # trf.Resize(size=256),
+    RandomCrop(size=288,pad_if_needed=True,padding=0),
     RandomHorizontalFlip(),
 ])
 

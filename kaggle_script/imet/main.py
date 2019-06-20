@@ -15,7 +15,6 @@ from torch import nn, cuda
 from torch.optim import Adam
 import tqdm
 
-
 from . import models
 from .dataset import TrainDataset, TTADataset, get_ids, N_CLASSES, DATA_ROOT
 from .transforms import train_transform, test_transform
@@ -27,9 +26,52 @@ from .utils import (
 from . import senet
 # a simple custom collate function, just to show the idea
 def my_collate(batch):
+    r"""Puts each data field into a tensor with outer dimension batch size"""
+
+    # error_msg = "batch must contain tensors, numbers, dicts or lists; found {}"
+    # elem_type = type(batch[0])
+    # if isinstance(batch[0], torch.Tensor):
+    #     out = None
+    #     if _use_shared_memory:
+    #         # If we're in a background process, concatenate directly into a
+    #         # shared memory tensor to avoid an extra copy
+    #         numel = sum([x.numel() for x in batch])
+    #         storage = batch[0].storage()._new_shared(numel)
+    #         out = batch[0].new(storage)
+    #     return torch.stack(batch, 0, out=out)
+    # elif elem_type.__module__ == 'numpy' and elem_type.__name__ != 'str_' \
+    #         and elem_type.__name__ != 'string_':
+    #     elem = batch[0]
+    #     if elem_type.__name__ == 'ndarray':
+    #         # array of string classes and object
+    #         if re.search('[SaUO]', elem.dtype.str) is not None:
+    #             raise TypeError(error_msg.format(elem.dtype))
+    #
+    #         return torch.stack([torch.from_numpy(b) for b in batch], 0)
+    #     if elem.shape == ():  # scalars
+    #         py_type = float if elem.dtype.name.startswith('float') else int
+    #         return numpy_type_map[elem.dtype.name](list(map(py_type, batch)))
+    # elif isinstance(batch[0], int_classes):
+    #     return torch.LongTensor(batch)
+    # elif isinstance(batch[0], float):
+    #     return torch.DoubleTensor(batch)
+    # elif isinstance(batch[0], string_classes):
+    #     return batch
+    # elif isinstance(batch[0], container_abcs.Mapping):
+    #     return {key: default_collate([d[key] for d in batch]) for key in batch[0]}
+    # elif isinstance(batch[0], container_abcs.Sequence):
+    #     transposed = zip(*batch)
+    #     return [default_collate(samples) for samples in transposed]
+    #
+    # raise TypeError((error_msg.format(type(batch[0]))))
+
     data = [item[0] for item in batch]
     target = [item[1] for item in batch]
-    target = torch.Tensor(target).long()#tensor()#torch.#LongTensor(target)
+    # target = torch.Tensor(target)
+    # target = torch.Tensor(target).long()#tensor()#torch.#LongTensor(target)
+
+    out = [data, target]
+
     return [data, target]
 
 def main(*myarg):
@@ -43,7 +85,7 @@ def main(*myarg):
         arg('--run_root', default=myarg[1])
     arg('--model', default='resnet101')#resnet101
     arg('--pretrained', type=int, default=1)
-    arg('--batch-size', type=int, default=64)
+    arg('--batch-size', type=int, default=40)
     arg('--step', type=int, default=1)
     arg('--workers', type=int, default=2 if ON_KAGGLE else 4)
     arg('--lr', type=float, default=1e-4)

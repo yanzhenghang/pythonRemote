@@ -22,7 +22,7 @@ if ON_kaggle:
 
 pythonVersion = 'python3'
 pth_str = '.'
-model_num = 19
+model_num = 20
 outputname = 'submission'+str(model_num)+'.csv'
 toPredictFiles ='model_'+str(model_num)+'/test.h5 '
 if ON_kaggle:
