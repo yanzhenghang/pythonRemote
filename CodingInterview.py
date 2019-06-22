@@ -1098,6 +1098,7 @@ for val in vals:
 pNode=pNode.next
 pNode = Solution().ListNodeSort(pNode)
 
+
 #190407 腾讯笔试2题  一般情况正确
 def costnum(n, l):
     costsum = abs(l[0])
