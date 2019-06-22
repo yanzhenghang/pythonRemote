@@ -122,6 +122,50 @@ class TreeNode:
         self.right = None
 class Solution:
 
+    def ListNodeSort(self,pNode:ListNode):
+        if pNode==None or pNode.next==None:
+            return pNode
+        def getMid(pNode:ListNode):
+            if pNode is None:
+                return None
+            p1=pNode
+            p2=p1.next
+            while p2!=None and p2.next!=None:
+                p1=p1.next
+                p2=p2.next.next
+            result=p1.next
+            p1.next = None
+            return result
+
+        midNode=getMid(pNode)
+        pNode=self.ListNodeSort(pNode)
+        midNode=self.ListNodeSort(midNode)
+        rslt=ListNode(0)
+        rslt0 = rslt
+        while pNode!=None and midNode!=None:
+            if pNode.val > midNode.val:
+                rslt.next=midNode
+                midNode=midNode.next
+                rslt=rslt.next
+                rslt.next=None
+            else:
+                rslt.next = pNode
+                pNode = pNode.next
+                rslt = rslt.next
+                rslt.next = None
+        if pNode!=None:
+            rslt.next = pNode
+        elif midNode!=None:
+            rslt.next=midNode
+        #pNode = rslt0.next
+        return rslt0.next
+
+
+
+
+
+
+
     def heapsort(self, nums:list):
         N = len(nums)
         if N<2:return
@@ -1042,6 +1086,17 @@ print(Solution().findMedianSortedArrays([1,3,5,7,9],[2,4,6,8,10,12]))
 # nums = [9,8,7,6,5,4,2,3]
 
 print(Solution().heapsort(nums = [9,13,7,12,5,17,2,3]))
+
+
+vals = [1,-2,1,9,8,-3,5]
+
+pNode = ListNode(5)
+pNode0 = pNode
+for val in vals:
+    pNode0.next = ListNode(val)
+    pNode0 = pNode0.next
+pNode=pNode.next
+pNode = Solution().ListNodeSort(pNode)
 
 #190407 腾讯笔试2题  一般情况正确
 def costnum(n, l):
